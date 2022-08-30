@@ -1,23 +1,31 @@
+var randomNumber = function (min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+   
+    return value; 
+};
+
 var fightOrSkip = function() {
 
     var promptFight = window.prompt("Would you like to Fight or Skip this battle? Enter 'FIGHT' or 'SKIP' to choose")
 
     if (promptFight === "" || promptFight === null) {
         window.alert("You need to provide a valid answer! Please try again.");
-        return fightOrSkip ();
+        return fightOrSkip();
     }
 
     promptFight = promptFight.toLowerCase();
+
 if (promptFight === "skip") {
-    var confirmSkip = windodw.confim("are you sure you'd like to quit?");
+    
+    var confirmSkip = windodw.confirm("Are you sure you'd like to quit?");
 
     if (confirmSkip) {
         window.alert(playerInfo.name + "has decdided to skip this fight. Goodbye!");
-        playerInfo.playerMoney = Math.max(0, PlayerInfo.money-10);
-
+        playerInfo.playerMoney = Math.max(0, playerInfo.money-10);
         return true;
     }
 }
+return false;
 };
 
 var fight = function(enemy) {
@@ -80,13 +88,18 @@ var startGame = function() {
       //reset player stats
       playerInfo.reset();
    
-    for (var i = 0; i < enemyInfo.length; i++){    
+    for (var i = 0; i < enemyInfo.length; i++) {   
+        
+        console.log(playerInfo);
+
         if (playerInfo.health > 0) {
             window.alert("Welcome to Robot Gladiators! Round" + (i + 1));
     
             var pickedEnemyObj = enemyInfo[i];
     
             pickedEnemyObj.health = randomNumber(40, 60);
+
+            console.log(pickedEnemyObj);
     
             fight(pickedEnemyObj);
 
@@ -111,22 +124,31 @@ endGame();
 var endGame = function() {
     window.alert("The game has now ended. Let's see how you did!")
 
-    if (playerInfo.health > 0) {
+    var highScore = localStorage.getItem("highscore");
+    if (highScore === null) {
+    highScore = 0;
+    }
     
-     window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
- }else {
-     window.alert("You've lost your robot in battle.");
- }
- var playgAgainConfirm = window.confirm("would you like to play again");
+    if (playerInfo.money > highScore) {
+        localStorage.setItem("highScore", playerInfo.money);
+        localStorage.setItem("name", playerInfo.name);
 
- if (playgAgainConfirm) {
-    startGame();
- } else {
-    window.alert("Thank you for playing Robot Gladiators! Come back soon!");
- }
+        alert(playerInfo.name + "now has the high sscore of" + playerInfo.money + "!");
+    } else {
+        alert(playerInfo.name + "did not the high score of" + highScore + "Maybe next time!")
+    }
+
+    var playgAgainConfirm = window.confirm("Would you like to play again?");
+
+    if (playgAgainConfirm) {
+        startGame();
+    }
+    else{
+        window.alert("Thank you for playing Robot Gladiators! Come back soon!");
+    }
 };
 
-var shop = function() {
+    var shop = function() {
     var shopOptionPrompt = window.prompt(
         "Would you like to REFILL your health, Upgrade your attack, or LEAVE the store? Please enter one: 1 for REFILL, 2 for UPGRADE, or 3 for LEAVE."
         );
@@ -151,12 +173,6 @@ var shop = function() {
                 shop();
                 break;
         }
-    };
-
-    var randomNumber = function (min, max) {
-        var value = Math.floor(Math.random() * (max - min + 1) + min);
-       
-        return value; 
     };
 
     var getPlayerName = function() {
@@ -215,13 +231,7 @@ var shop = function() {
             attack: randomNumber(10, 14)
         }
     ];
-
-console.log(enemyInfo);
-console.log(enemyInfo[0]);
-console.log(enemyInfo[0].names);
-console.log(enemyInfo[0]['attack']);
-
-    
+ 
 //start the game when the page loads
 startGame();
 
